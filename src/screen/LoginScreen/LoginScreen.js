@@ -1,14 +1,4 @@
-import {
-    Image,
-    StyleSheet,
-    Text,
-    View,
-    ScrollView,
-    SafeAreaView,
-    TextInput,
-    TouchableOpacity,
-    Platform,
-} from 'react-native';
+import { Image, StyleSheet, Text, View, ScrollView, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import images from '../../assets/images';
@@ -33,7 +23,7 @@ function Login({ navigation }) {
                     <Text style={styles.register}>
                         Don't have an account!{' '}
                         <Text style={styles.textColor} onPress={() => navigation.navigate('Home')}>
-                            Register
+                            Register Here
                         </Text>
                     </Text>
                 </ScrollView>
