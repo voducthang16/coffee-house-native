@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeScreen, UserScreen } from '../../screen';
+import { HomeScreen, UserScreen, TableScreen } from '../../screen';
 import { View, Image, Text, StyleSheet } from 'react-native';
 import images from '../../assets/images';
 const Tab = createBottomTabNavigator();
@@ -39,6 +39,15 @@ function BottomNavigation() {
                             <Text style={styles(focused).text}>User</Text>
                         </View>
                     ),
+                }}
+            />
+            <Tab.Screen
+                name="TableScreen"
+                component={TableScreen}
+                options={{
+                    tabBarButton: () => null,
+                    tabBarVisible: false,
+                    headerShown: false,
                 }}
             />
         </Tab.Navigator>

@@ -1,72 +1,242 @@
-import {
-    Image,
-    StyleSheet,
-    Text,
-    View,
-    ScrollView,
-    SafeAreaView,
-    TextInput,
-    TouchableOpacity,
-    Platform,
-} from 'react-native';
+import { Image, StyleSheet, Text, View, ScrollView, SafeAreaView, TouchableOpacity, Animated } from 'react-native';
+import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import images from '../../assets/images';
-function HomeScreen() {
+function HomeScreen({ navigation, selectedList, setSelectedList }) {
+    const [list, setList] = useState('All');
+    selectedList = list;
+    setSelectedList = setList;
+    const listTable = ['All', 'Active', 'Inactive'];
+
+    let AnimatedHeaderValue = new Animated.Value(0);
+    const Header_Max_Height = 70;
+    const Header_Min_Height = 70;
+
+    const animateHeaderBackgroundColor = AnimatedHeaderValue.interpolate({
+        inputRange: [0, Header_Max_Height - Header_Min_Height],
+        outputRange: ['white', 'white'],
+        extrapolate: 'clamp',
+    });
+
+    const animateHeaderHeight = AnimatedHeaderValue.interpolate({
+        inputRange: [0, Header_Max_Height - Header_Min_Height],
+        outputRange: [Header_Max_Height, Header_Min_Height],
+        extrapolate: 'clamp',
+    });
+
     return (
         <SafeAreaView style={styles().container}>
             <StatusBar style="dark" />
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                <View style={styles().header}>
-                    <View>
-                        <Text style={{ fontSize: 16, color: '#7e7e7e' }}>Good Morning,</Text>
-                        <Text style={{ fontSize: 22, fontWeight: '600' }}>V</Text>
-                    </View>
-                    <Image style={{ width: 32, height: 32 }} source={images.notification} />
+            <Animated.View
+                style={[
+                    styles().header,
+                    { height: animateHeaderHeight, backgroundColor: animateHeaderBackgroundColor },
+                ]}
+            >
+                <View>
+                    <Text style={{ fontSize: 16, color: '#7e7e7e' }}>Good Morning,</Text>
+                    <Text style={{ fontSize: 22, fontWeight: '600' }}>V</Text>
                 </View>
+                <Image style={{ width: 32, height: 32 }} source={images.notification} />
+            </Animated.View>
+            <ScrollView
+                scrollEventThrottle={16}
+                onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: AnimatedHeaderValue } } }], {
+                    useNativeDriver: false,
+                })}
+            >
                 <View style={styles().body}>
-                    <Text style={{ fontSize: 28, fontWeight: '600' }}>Table List</Text>
+                    <Text style={{ fontSize: 28, fontWeight: '600', marginHorizontal: 6 }}>Table List</Text>
                     <View style={styles().list}>
-                        <Text style={styles().listItem}>All</Text>
-                        <Text style={[styles().listItem, { backgroundColor: '#36cd78', borderColor: '#36cd78' }]}>
-                            Active
-                        </Text>
-                        <Text style={styles().listItem}>Inactive</Text>
+                        {listTable.map((item, index) => (
+                            <TouchableOpacity
+                                key={index}
+                                onPress={() => setSelectedList(item)}
+                                style={[styles().listItem, selectedList === item && styles().selected]}
+                            >
+                                <Text style={[styles().listText, selectedList === item && styles().selectedText]}>
+                                    {item}
+                                </Text>
+                            </TouchableOpacity>
+                        ))}
                     </View>
                     <View style={styles().table}>
-                        <View style={[styles().tableItem, { backgroundColor: '#36cd78', borderColor: '#36cd78' }]}>
+                        <TouchableOpacity
+                            style={[styles().tableItem, { backgroundColor: '#36cd78', borderColor: '#36cd78' }]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 1,
+                                });
+                            }}
+                        >
                             <Text style={{ fontSize: 18, fontWeight: '500', color: '#fff' }}>Table 1</Text>
                             <Text style={{ color: '#fff' }}>Active</Text>
-                        </View>
-                        <View style={styles().tableItem}>
-                            <Text>Table 2</Text>
-                            <Text>Inactive</Text>
-                        </View>
-                        <View style={styles().tableItem}></View>
-                    </View>
-                    <View style={styles().table}>
-                        <View style={styles().tableItem}></View>
-                        <View style={styles().tableItem}></View>
-                        <View style={styles().tableItem}></View>
-                    </View>
-                    <View style={styles().table}>
-                        <View style={styles().tableItem}></View>
-                        <View style={styles().tableItem}></View>
-                        <View style={styles().tableItem}></View>
-                    </View>
-                    <View style={styles().table}>
-                        <View style={styles().tableItem}></View>
-                        <View style={styles().tableItem}></View>
-                        <View style={styles().tableItem}></View>
-                    </View>
-                    <View style={styles().table}>
-                        <View style={styles().tableItem}></View>
-                        <View style={styles().tableItem}></View>
-                        <View style={styles().tableItem}></View>
-                    </View>
-                    <View style={styles().table}>
-                        <View style={styles().tableItem}></View>
-                        <View style={styles().tableItem}></View>
-                        <View style={styles().tableItem}></View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 2,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#000' }}>Table 2</Text>
+                            <Text style={{ color: '#000' }}>Inactive</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 3,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#000' }}>Table 3</Text>
+                            <Text style={{ color: '#000' }}>Inactive</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem, { backgroundColor: '#36cd78', borderColor: '#36cd78' }]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 4,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#fff' }}>Table 4</Text>
+                            <Text style={{ color: '#fff' }}>Active</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem, { backgroundColor: '#36cd78', borderColor: '#36cd78' }]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 5,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#fff' }}>Table 5</Text>
+                            <Text style={{ color: '#fff' }}>Active</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 6,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#000' }}>Table 6</Text>
+                            <Text style={{ color: '#000' }}>Inactive</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 7,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#000' }}>Table 7</Text>
+                            <Text style={{ color: '#000' }}>Inactive</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem, { backgroundColor: '#36cd78', borderColor: '#36cd78' }]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 8,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#fff' }}>Table 8</Text>
+                            <Text style={{ color: '#fff' }}>Active</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem, { backgroundColor: '#36cd78', borderColor: '#36cd78' }]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 9,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#fff' }}>Table 9</Text>
+                            <Text style={{ color: '#fff' }}>Active</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 10,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#000' }}>Table 10</Text>
+                            <Text style={{ color: '#000' }}>Inactive</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 11,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#000' }}>Table 11</Text>
+                            <Text style={{ color: '#000' }}>Inactive</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem, { backgroundColor: '#36cd78', borderColor: '#36cd78' }]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 12,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#fff' }}>Table 12</Text>
+                            <Text style={{ color: '#fff' }}>Active</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem, { backgroundColor: '#36cd78', borderColor: '#36cd78' }]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 13,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#fff' }}>Table 13</Text>
+                            <Text style={{ color: '#fff' }}>Active</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 14,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#000' }}>Table 14</Text>
+                            <Text style={{ color: '#000' }}>Inactive</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 15,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#000' }}>Table 15</Text>
+                            <Text style={{ color: '#000' }}>Inactive</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles().tableItem, { backgroundColor: '#36cd78', borderColor: '#36cd78' }]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 16,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#fff' }}>Table 16</Text>
+                            <Text style={{ color: '#fff' }}>Active</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </ScrollView>
@@ -79,17 +249,17 @@ const styles = (props) =>
         container: {
             paddingTop: 36,
             flex: 1,
-            // backgroundColor: 'yellow',
             backgroundColor: '#fff',
         },
         header: {
             padding: 16,
-            height: 70,
-            width: '100%',
+            marginHorizontal: 6,
+            left: 0,
+            right: 0,
             justifyContent: 'space-between',
             alignItems: 'center',
             flexDirection: 'row',
-            backgroundColor: '#feeee1',
+            // backgroundColor: '#feeee1',
         },
         body: {
             marginTop: 8,
@@ -101,39 +271,45 @@ const styles = (props) =>
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-around',
+            marginHorizontal: 6,
             marginTop: 8,
             marginBottom: 16,
         },
         listItem: {
-            fontSize: 16,
-            paddingLeft: 4,
-            paddingRight: 4,
-            paddingTop: 8,
-            paddingBottom: 8,
-            backgroundColor: 'rgb(238,174,202)',
             flex: 1,
-            marginLeft: 4,
-            marginRight: 4,
+            fontSize: 16,
+            paddingVertical: 8,
+            marginHorizontal: 4,
             marginBottom: 4,
-            textAlign: 'center',
             borderRadius: 8,
             borderWidth: 1,
-            borderColor: '#ffa4dc',
+            borderColor: 'transparent',
             borderStyle: 'solid',
-            color: '#fff',
+            backgroundColor: '#fef5e6',
+        },
+        listText: {
+            textAlign: 'center',
+            color: 'coral',
             fontSize: 16,
-            fontWeight: '500',
+            fontWeight: '400',
+        },
+        selected: {
+            backgroundColor: 'coral',
+        },
+        selectedText: {
+            color: '#fff',
         },
         table: {
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
         },
         tableItem: {
-            flex: 1,
+            width: '30%',
             alignItems: 'center',
             justifyContent: 'space-evenly',
             margin: 4,
-            height: 111,
+            height: 108,
             backgroundColor: '#ddd',
             borderRadius: 16,
             borderWidth: 1,

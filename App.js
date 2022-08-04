@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Easing, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LoginScreen } from './src/screen';
 import BottomNavigation from './src/components/BottomNavigation/';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -11,7 +12,13 @@ export default function App() {
     // initRoute = 'Login';
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName={initRoute}>
+            <Stack.Navigator
+                screenOptions={{
+                    gestureEnabled: true,
+                    gestureDirection: 'horizontal',
+                }}
+                initialRouteName={initRoute}
+            >
                 <Stack.Screen name="BottomNavigation" component={BottomNavigation} options={{ headerShown: false }} />
                 <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
             </Stack.Navigator>
