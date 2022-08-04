@@ -201,7 +201,10 @@ function HomeScreen({ navigation, selectedList, setSelectedList }) {
                             <Text style={{ color: '#000' }}>Inactive</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={[styles().tableItem, { backgroundColor: '#36cd78', borderColor: '#36cd78' }]}
+                            style={[
+                                styles().tableItem,
+                                { backgroundColor: '#36cd78', borderColor: '#36cd78', marginLeft: 10 },
+                            ]}
                             onPress={() => {
                                 navigation.navigate('TableScreen', {
                                     tableId: 16,
@@ -209,6 +212,20 @@ function HomeScreen({ navigation, selectedList, setSelectedList }) {
                             }}
                         >
                             <Text style={{ fontSize: 18, fontWeight: '500', color: '#fff' }}>Table 16</Text>
+                            <Text style={{ color: '#fff' }}>Active</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[
+                                styles().tableItem,
+                                { backgroundColor: '#36cd78', borderColor: '#36cd78', marginRight: 'auto' },
+                            ]}
+                            onPress={() => {
+                                navigation.navigate('TableScreen', {
+                                    tableId: 17,
+                                });
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: '500', color: '#fff' }}>Table 17</Text>
                             <Text style={{ color: '#fff' }}>Active</Text>
                         </TouchableOpacity>
                     </View>
@@ -236,8 +253,7 @@ const styles = (props) =>
             alignItems: 'center',
             justifyContent: 'space-around',
             marginHorizontal: 6,
-            marginTop: 8,
-            marginBottom: 16,
+            marginVertical: 8,
         },
         listItem: {
             flex: 1,
@@ -269,10 +285,10 @@ const styles = (props) =>
             justifyContent: 'center',
         },
         tableItem: {
+            margin: 4,
             width: '30%',
             alignItems: 'center',
             justifyContent: 'space-evenly',
-            margin: 4,
             height: 108,
             backgroundColor: '#ddd',
             borderRadius: 16,

@@ -1,4 +1,5 @@
-import { View, Animated, StyleSheet, Text, Image } from 'react-native';
+import { View, Animated, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import images from '../../assets/images';
 
 export let AnimatedHeaderValue = new Animated.Value(0);
@@ -15,15 +16,29 @@ const animateHeaderHeight = AnimatedHeaderValue.interpolate({
     outputRange: [Header_Max_Height, Header_Min_Height],
     extrapolate: 'clamp',
 });
-function Header() {
+function Header({ text }) {
+    const navigation = useNavigation();
     return (
         <Animated.View
             style={[styles().header, { height: animateHeaderHeight, backgroundColor: animateHeaderBackgroundColor }]}
         >
-            <View>
-                <Text style={{ fontSize: 16, color: '#7e7e7e' }}>Good Afternoon,</Text>
-                <Text style={{ fontSize: 22, fontWeight: '600' }}>V</Text>
-            </View>
+            {text ? (
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.goBack();
+                        }}
+                    >
+                        <Image style={{ width: 24, height: 24, marginRight: 'auto' }} source={images.back} />
+                    </TouchableOpacity>
+                    <Text style={{ fontSize: 24, marginLeft: 8, flex: 1, textAlign: 'center' }}>{text}</Text>
+                </View>
+            ) : (
+                <View>
+                    <Text style={{ fontSize: 16, color: '#7e7e7e' }}>Good Evening,</Text>
+                    <Text style={{ fontSize: 22, fontWeight: '600' }}>V</Text>
+                </View>
+            )}
             <Image style={{ width: 32, height: 32 }} source={images.notification} />
         </Animated.View>
     );
@@ -39,6 +54,8 @@ const styles = (props) =>
             justifyContent: 'space-between',
             alignItems: 'center',
             flexDirection: 'row',
+            borderBottomWidth: 1,
+            borderBottomColor: '#e3e3e3',
         },
     });
 
