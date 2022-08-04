@@ -1,44 +1,18 @@
-import { Image, StyleSheet, Text, View, ScrollView, SafeAreaView, TouchableOpacity, Animated } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, SafeAreaView, TouchableOpacity, Animated } from 'react-native';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import images from '../../assets/images';
+import Header from '../../layouts/Header/Header';
+import { AnimatedHeaderValue } from '../../layouts/Header/Header';
 function HomeScreen({ navigation, selectedList, setSelectedList }) {
     const [list, setList] = useState('All');
     selectedList = list;
     setSelectedList = setList;
     const listTable = ['All', 'Active', 'Inactive'];
 
-    let AnimatedHeaderValue = new Animated.Value(0);
-    const Header_Max_Height = 70;
-    const Header_Min_Height = 70;
-
-    const animateHeaderBackgroundColor = AnimatedHeaderValue.interpolate({
-        inputRange: [0, Header_Max_Height - Header_Min_Height],
-        outputRange: ['white', 'white'],
-        extrapolate: 'clamp',
-    });
-
-    const animateHeaderHeight = AnimatedHeaderValue.interpolate({
-        inputRange: [0, Header_Max_Height - Header_Min_Height],
-        outputRange: [Header_Max_Height, Header_Min_Height],
-        extrapolate: 'clamp',
-    });
-
     return (
         <SafeAreaView style={styles().container}>
             <StatusBar style="dark" />
-            <Animated.View
-                style={[
-                    styles().header,
-                    { height: animateHeaderHeight, backgroundColor: animateHeaderBackgroundColor },
-                ]}
-            >
-                <View>
-                    <Text style={{ fontSize: 16, color: '#7e7e7e' }}>Good Morning,</Text>
-                    <Text style={{ fontSize: 22, fontWeight: '600' }}>V</Text>
-                </View>
-                <Image style={{ width: 32, height: 32 }} source={images.notification} />
-            </Animated.View>
+            <Header />
             <ScrollView
                 scrollEventThrottle={16}
                 onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: AnimatedHeaderValue } } }], {
@@ -250,16 +224,6 @@ const styles = (props) =>
             paddingTop: 36,
             flex: 1,
             backgroundColor: '#fff',
-        },
-        header: {
-            padding: 16,
-            marginHorizontal: 6,
-            left: 0,
-            right: 0,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexDirection: 'row',
-            // backgroundColor: '#feeee1',
         },
         body: {
             marginTop: 8,
